@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css">
+
+
+</head>
+<body>
+<div class="container">
+<div class="text-center">
+    <br>
+    <h4>Unemployment v/s Poverty comparison for US States and Counties</h4>
+    <br>
+    <form id="stats_form" action="/" method="POST">
+        <select id ="granularity_select" class="form-control" name="granularity_select">
+          <option selected>Select Granularity</option>
+          <option value="state">State</option>
+          <option value="county">County</option>
+        </select>
+        <br>
+        <select id="state_select" class="form-control" name="state_select" style="display: none;">
+          <option selected>Select State</option>
+            {% for state in states %}
+            <option value="{{state[2]}}">{{state[1]}}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <br>
+    {% if image_src %}
+        <img src="data:image/png;base64,{{ image_src }}">
+    {% endif %}
+</div>
+</div>
+</body>
+<script>
+$(document).ready(function(){
+    $('#granularity_select').change(function() {
+      var value = $(this).find(":selected").val();
+      if (value == 'county')
+        $('#state_select').show()
+      else if (value == 'state')
+      {
+        $('#stats_form').submit()
+        $('#state_select').hide()
+      }
+      else
+        $('#state_select').hide()
+    });
+    $('#state_select').change(function() {
+      var value = $(this).find(":selected").val();
+      if (value != 'Select Granularity')
+        $('#stats_form').submit()
+    });
+});
+
+</script>
+</html>
